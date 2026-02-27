@@ -248,6 +248,10 @@ def predict_crop(
         yield_q_per_bigha    = round(profit_data["effective_yield_q_per_acre"] * bigha_factor, 2)
         profit_per_bigha_inr = round(profit_data["profit_per_acre_inr"] * bigha_factor, 0)
 
+        # Indian units: kg (1 quintal = 100 kg)
+        total_production_kg = round(profit_data["total_production_quintals"] * 100, 2)
+        price_per_kg_inr    = round(profit_data["price_per_quintal"] / 100, 2)
+
         crop_data.append({
             "crop":                    crop,
             "suitability_conf":        conf,
@@ -256,6 +260,9 @@ def predict_crop(
             "yield_q_per_bigha":       yield_q_per_bigha,
             "total_production_quintals": profit_data["total_production_quintals"],
             "price_per_quintal":       profit_data["price_per_quintal"],
+            "total_production_kg":    total_production_kg,
+            "price_per_kg_inr":       price_per_kg_inr,
+            "estimated_sale_quantity_kg": total_production_kg,
             "gross_revenue_inr":       profit_data["gross_revenue_inr"],
             "input_cost_inr":          profit_data["input_cost_inr"],
             "net_profit_inr":          profit_data["net_profit_inr"],

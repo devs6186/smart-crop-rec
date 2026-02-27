@@ -129,12 +129,20 @@ INDIAN_STATES: list[str] = sorted(BIGHA_TO_ACRES.keys())
 # ---------------------------------------------------------------------------
 # Key agricultural districts by state
 # (major crop-producing districts listed; less common → "Other / Not Listed")
+# All states/UTs in INDIAN_STATES have an entry so district dropdown always shows options.
 # ---------------------------------------------------------------------------
 DISTRICTS_BY_STATE: dict[str, list[str]] = {
+    "Andaman and Nicobar Islands": [
+        "South Andaman", "North and Middle Andaman", "Nicobar", "Other / Not Listed",
+    ],
     "Andhra Pradesh": [
         "Guntur", "Krishna", "Kurnool", "East Godavari", "West Godavari",
         "Prakasam", "Srikakulam", "Vizianagaram", "Visakhapatnam",
         "Nellore", "Chittoor", "Kadapa", "Anantapur", "Other / Not Listed",
+    ],
+    "Arunachal Pradesh": [
+        "Papum Pare", "Changlang", "Lohit", "West Kameng", "East Siang",
+        "Lower Subansiri", "Tirap", "Tawang", "Upper Siang", "Other / Not Listed",
     ],
     "Assam": [
         "Kamrup", "Nagaon", "Barpeta", "Goalpara", "Sibsagar", "Darrang",
@@ -145,9 +153,22 @@ DISTRICTS_BY_STATE: dict[str, list[str]] = {
         "Saran", "Siwan", "East Champaran", "West Champaran", "Rohtas",
         "Aurangabad", "Darbhanga", "Samastipur", "Other / Not Listed",
     ],
+    "Chandigarh": [
+        "Chandigarh", "Other / Not Listed",
+    ],
     "Chhattisgarh": [
         "Raipur", "Bilaspur", "Durg", "Rajnandgaon", "Raigarh",
         "Korba", "Janjgir-Champa", "Bastar", "Surguja", "Other / Not Listed",
+    ],
+    "Dadra and Nagar Haveli and Daman and Diu": [
+        "Dadra and Nagar Haveli", "Daman", "Diu", "Other / Not Listed",
+    ],
+    "Delhi": [
+        "North Delhi", "South Delhi", "East Delhi", "West Delhi", "Central Delhi",
+        "New Delhi", "North East Delhi", "North West Delhi", "Shahdara", "Other / Not Listed",
+    ],
+    "Goa": [
+        "North Goa", "South Goa", "Other / Not Listed",
     ],
     "Gujarat": [
         "Ahmedabad", "Anand", "Mehsana", "Kheda", "Junagadh", "Rajkot",
@@ -231,8 +252,40 @@ DISTRICTS_BY_STATE: dict[str, list[str]] = {
         "Jammu", "Srinagar", "Anantnag", "Baramulla", "Kupwara",
         "Pulwama", "Kathua", "Udhampur", "Other / Not Listed",
     ],
+    "Ladakh": [
+        "Leh", "Kargil", "Other / Not Listed",
+    ],
+    "Lakshadweep": [
+        "Kavaratti", "Amini", "Minicoy", "Other / Not Listed",
+    ],
+    "Manipur": [
+        "Imphal East", "Imphal West", "Thoubal", "Bishnupur", "Churachandpur",
+        "Senapati", "Ukhrul", "Tamenglong", "Other / Not Listed",
+    ],
+    "Meghalaya": [
+        "East Khasi Hills", "West Khasi Hills", "Jaintia Hills", "Ri Bhoi",
+        "East Garo Hills", "West Garo Hills", "South Garo Hills", "Other / Not Listed",
+    ],
+    "Mizoram": [
+        "Aizawl", "Lunglei", "Champhai", "Mamit", "Kolasib",
+        "Serchhip", "Lawngtlai", "Saiha", "Other / Not Listed",
+    ],
+    "Nagaland": [
+        "Kohima", "Dimapur", "Mokokchung", "Tuensang", "Wokha",
+        "Zunheboto", "Phek", "Mon", "Other / Not Listed",
+    ],
+    "Puducherry": [
+        "Puducherry", "Karaikal", "Mahe", "Yanam", "Other / Not Listed",
+    ],
+    "Sikkim": [
+        "East Sikkim", "South Sikkim", "West Sikkim", "North Sikkim", "Other / Not Listed",
+    ],
+    "Tripura": [
+        "West Tripura", "South Tripura", "Dhalai", "North Tripura",
+        "Gomati", "Khowai", "Unakoti", "Sepahijala", "Other / Not Listed",
+    ],
 }
-# Fallback for states with no explicit district list
+# Fallback for states with no explicit district list (should not be needed if all states are above)
 DEFAULT_DISTRICTS = ["Other / Not Listed (state-level data will be used)"]
 
 
