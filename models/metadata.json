@@ -1,0 +1,62 @@
+{
+  "best_model_name": "KNN",
+  "test_accuracy": 0.9545,
+  "test_f1_macro": 0.9394,
+  "cv_f1_mean": 0.7261,
+  "cv_f1_std": 0.0896,
+  "feature_names": [
+    "N",
+    "P",
+    "K",
+    "temperature",
+    "humidity",
+    "ph",
+    "rainfall"
+  ],
+  "feature_importance": {
+    "N": 0.404545,
+    "P": 0.263636,
+    "K": 0.259091,
+    "temperature": 0.272727,
+    "humidity": 0.3,
+    "ph": 0.245455,
+    "rainfall": 0.327273
+  },
+  "comparison": [
+    {
+      "model": "KNN",
+      "test_accuracy": 0.9545,
+      "test_f1_macro": 0.9394,
+      "cv_f1_mean": 0.7261,
+      "cv_f1_std": 0.0896
+    },
+    {
+      "model": "SVM",
+      "test_accuracy": 0.9545,
+      "test_f1_macro": 0.9394,
+      "cv_f1_mean": 0.8394,
+      "cv_f1_std": 0.0993
+    },
+    {
+      "model": "Logistic Regression",
+      "test_accuracy": 0.9545,
+      "test_f1_macro": 0.9394,
+      "cv_f1_mean": 0.7537,
+      "cv_f1_std": 0.1201
+    },
+    {
+      "model": "Random Forest",
+      "test_accuracy": 0.9091,
+      "test_f1_macro": 0.9091,
+      "cv_f1_mean": 0.7436,
+      "cv_f1_std": 0.0745
+    },
+    {
+      "model": "Decision Tree",
+      "test_accuracy": 0.7727,
+      "test_f1_macro": 0.7348,
+      "cv_f1_mean": 0.6409,
+      "cv_f1_std": 0.0949
+    }
+  ]
+}
