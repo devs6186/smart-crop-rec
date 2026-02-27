@@ -165,6 +165,7 @@ def train_and_select_best(
         "test_f1_macro": round(best["test_f1"], 4),
         "cv_f1_mean": round(best["cv_f1_mean"], 4),
         "cv_f1_std": round(best["cv_f1_std"], 4),
+        "train_size": int(len(X_train)),   # used by UI to warn on small datasets
         "feature_names": feature_names,
         "feature_importance": {k: round(v, 6) for k, v in importance_dict.items()},
         "comparison": comparison,
