@@ -34,6 +34,7 @@ SAMPLE_DATA_FNAME = "Crop_Recommendation_sample.csv"
 #   climate_vulnerability.csv : State, District, Vulnerability_Index (0-100)
 # ---------------------------------------------------------------------------
 REGION_YIELD_FNAME       = "state_wise_yield.csv"
+CROP_YIELD_FNAME         = "crop_yield.csv"   # optional: converted to training rows (Crop, Annual_Rainfall, State -> N,P,K,...)
 MARKET_PRICE_FNAME       = "market_prices.csv"
 COST_CULTIVATION_FNAME   = "cost_of_cultivation.csv"
 CLIMATE_RISK_FNAME       = "climate_vulnerability.csv"
@@ -55,6 +56,33 @@ CV_FOLDS     = 5
 TOP_K_CROPS       = 5     # final crops shown to user
 CANDIDATES_POOL   = 12    # top-N by ML suitability to evaluate for profit ranking
 MIN_SUITABILITY_PCT = 5.0 # minimum ML confidence % to be a profit-ranking candidate
+
+# Minimum viable land (acres) per crop — crops needing more space are filtered for small holdings
+# Based on ICAR/NBSS&LUP: sugarcane/cotton need bulk; pulses/vegetables work on small plots
+DEFAULT_MIN_LAND_ACRES = 0.1   # unknown crops assumed viable on small plots
+CROP_MIN_LAND_ACRES: dict[str, float] = {
+    # Large-scale (1–2+ acres): bulk crops, plantations
+    "sugarcane": 2.0, "cotton": 1.0, "jute": 1.0, "mesta": 1.0, "tobacco": 1.0,
+    # Orchards / plantations (0.5+ acres)
+    "coconut": 0.5, "banana": 0.5, "mango": 0.5, "apple": 0.5, "grapes": 0.5,
+    "papaya": 0.5, "pomegranate": 0.5, "watermelon": 0.5, "muskmelon": 0.5,
+    "orange": 0.5, "coffee": 0.5, "arecanut": 0.5, "cashewnut": 0.5,
+    "cardamom": 0.5, "black pepper": 0.5,
+    # Root/tuber (0.25 acres)
+    "potato": 0.25, "onion": 0.25, "sweet potato": 0.25, "tapioca": 0.25,
+    "ginger": 0.25, "turmeric": 0.25, "garlic": 0.25,
+    # Cereals (0.2 acres)
+    "rice": 0.2, "wheat": 0.2, "maize": 0.2, "bajra": 0.2, "barley": 0.2,
+    "jowar": 0.2, "ragi": 0.2, "small millets": 0.2,
+    # Pulses, oilseeds, spices (0.1 acres — work on small plots)
+    "chickpea": 0.1, "pigeonpeas": 0.1, "mungbean": 0.1, "blackgram": 0.1,
+    "lentil": 0.1, "kidneybeans": 0.1, "mothbeans": 0.1, "cowpea": 0.1,
+    "peas": 0.1, "groundnut": 0.1, "soyabean": 0.1, "mustard": 0.1,
+    "sesamum": 0.1, "sunflower": 0.1, "safflower": 0.1, "niger seed": 0.1,
+    "dry chillies": 0.1, "coriander": 0.1, "castor seed": 0.1,
+    "linseed": 0.1, "guar seed": 0.1, "horse-gram": 0.1, "khesari": 0.1,
+    "sannhamp": 0.1,
+}
 
 # ---------------------------------------------------------------------------
 # Model artifact names
@@ -125,6 +153,40 @@ DEFAULT_BIGHA_ACRES = 0.40   # fallback when state not in map
 # Indian states list (for UI dropdown)
 # ---------------------------------------------------------------------------
 INDIAN_STATES: list[str] = sorted(BIGHA_TO_ACRES.keys())
+
+# ---------------------------------------------------------------------------
+# Agro-climatic zone defaults (state → N,P,K,temp,humidity,ph,rainfall)
+# Used by app for region-specific inputs and by data_loader when converting crop_yield.csv.
+# ---------------------------------------------------------------------------
+ZONE_DEFAULTS: dict[str, dict[str, float]] = {
+    "arid_nw":       {"N": 20, "P": 28, "K": 32, "temperature": 32.0, "humidity": 44.0, "ph": 7.6, "rainfall": 28.0},
+    "eastern_humid": {"N": 85, "P": 42, "K": 38, "temperature": 21.0, "humidity": 90.0, "ph": 5.7, "rainfall": 295.0},
+    "southern":      {"N": 72, "P": 48, "K": 45, "temperature": 24.0, "humidity": 80.0, "ph": 6.2, "rainfall": 195.0},
+    "west_coast":    {"N": 84, "P": 40, "K": 36, "temperature": 20.2, "humidity": 91.0, "ph": 5.6, "rainfall": 285.0},
+    "central":       {"N": 52, "P": 44, "K": 41, "temperature": 25.5, "humidity": 70.0, "ph": 6.1, "rainfall": 92.0},
+    "himalayan":     {"N": 87, "P": 42, "K": 40, "temperature": 18.5, "humidity": 87.0, "ph": 5.9, "rainfall": 255.0},
+    "western_dry":   {"N": 40, "P": 36, "K": 40, "temperature": 27.0, "humidity": 59.0, "ph": 6.9, "rainfall": 55.0},
+}
+STATE_ZONE: dict[str, str] = {
+    "Rajasthan": "arid_nw", "Haryana": "arid_nw", "Punjab": "arid_nw", "Delhi": "arid_nw", "Chandigarh": "arid_nw",
+    "West Bengal": "eastern_humid", "Odisha": "eastern_humid", "Assam": "eastern_humid",
+    "Arunachal Pradesh": "eastern_humid", "Manipur": "eastern_humid", "Meghalaya": "eastern_humid",
+    "Mizoram": "eastern_humid", "Nagaland": "eastern_humid", "Tripura": "eastern_humid",
+    "Andhra Pradesh": "southern", "Telangana": "southern", "Karnataka": "southern", "Tamil Nadu": "southern", "Puducherry": "southern",
+    "Kerala": "west_coast", "Goa": "west_coast",
+    "Maharashtra": "western_dry", "Gujarat": "western_dry", "Dadra and Nagar Haveli and Daman and Diu": "western_dry",
+    "Madhya Pradesh": "central", "Chhattisgarh": "central", "Uttar Pradesh": "central", "Bihar": "central", "Jharkhand": "central",
+    "Himachal Pradesh": "himalayan", "Uttarakhand": "himalayan", "Jammu and Kashmir": "himalayan", "Ladakh": "himalayan", "Sikkim": "himalayan",
+    "Andaman and Nicobar Islands": "eastern_humid", "Lakshadweep": "west_coast",
+}
+
+
+def get_state_soil_climate(state: str | None) -> dict[str, float]:
+    """Return N,P,K,temperature,humidity,ph,rainfall for a state (from agro-climatic zone). Used for crop_yield conversion."""
+    if not state or state not in STATE_ZONE:
+        return {k: 50.0 if k in ("N", "P", "K") else 25.0 if k == "temperature" else 65.0 if k == "humidity" else 6.5 if k == "ph" else 120.0 for k in FEATURE_COLUMNS}
+    zone = STATE_ZONE[state]
+    return dict(ZONE_DEFAULTS[zone])
 
 # ---------------------------------------------------------------------------
 # Key agricultural districts by state

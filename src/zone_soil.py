@@ -33,11 +33,15 @@ def get_default_soil_climate(state: str | None, district: str | None = None) -> 
     for k in FEATURE_COLUMNS:
         v = base[k]
         delta = _state_offset(state, district, k)
-        if k in ("temperature", "humidity", "ph"):
-            v = max(15.0, min(45.0 if k == "temperature" else 100.0 if k == "humidity" else 9.5, v + delta * 8))
+        if k == "temperature":
+            v = max(8.0, min(42.0, v + delta * 4))
+        elif k == "humidity":
+            v = max(14.0, min(99.0, v + delta * 6))
+        elif k == "ph":
+            v = max(3.5, min(9.5, v + delta * 0.6))
         elif k == "rainfall":
-            v = max(20.0, min(300.0, v + delta * 55))
-        else:
-            v = max(0, min(205 if k == "K" else 145 if k == "P" else 140, v + int(delta * 22)))
+            v = max(20.0, min(300.0, v + delta * 40))
+        else:  # N, P, K
+            v = max(0, min(205 if k == "K" else 145 if k == "P" else 160, v + int(delta * 18)))
         out[k] = round(v, 2) if isinstance(v, float) else v
     return out

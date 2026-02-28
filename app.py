@@ -338,15 +338,7 @@ def main():
 
 
 def _get_engine_stats():
-    """Aggregate engine data stats: records, states, crops. Falls back to ML model stats when market data absent."""
-    status = get_data_status()
-    if status.get("exists") and status.get("rows", 0) > 0:
-        return {
-            "records": status["rows"],
-            "states": status.get("states", "?"),
-            "crops": status.get("crops", "?"),
-        }
-    # Fallback: ML model stats
+    """ML model stats + market data stats."""
     try:
         meta_path = MODELS_DIR / METADATA_FNAME
         if meta_path.exists():
@@ -357,9 +349,14 @@ def _get_engine_stats():
             train_size = 0
         model, _, label_encoder, _ = load_artifacts()
         num_crops = len(label_encoder.classes_) if label_encoder else 0
-        return {"records": train_size, "states": "—", "crops": num_crops}
     except Exception:
-        return {"records": "?", "states": "?", "crops": "?"}
+        train_size = 0
+        num_crops = "?"
+
+    status = get_data_status()
+    num_states = status.get("states", "—") if status.get("exists") else "—"
+
+    return {"records": train_size, "states": num_states, "crops": num_crops}
 
 
 def _render_sidebar():

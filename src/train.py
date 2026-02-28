@@ -8,7 +8,7 @@ import joblib
 import numpy as np
 from pathlib import Path
 from sklearn.tree import DecisionTreeClassifier
-from sklearn.ensemble import RandomForestClassifier
+from sklearn.ensemble import RandomForestClassifier, ExtraTreesClassifier
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.svm import SVC
 from sklearn.linear_model import LogisticRegression
@@ -35,34 +35,43 @@ from src.explainer import get_importance_dict, plot_feature_importance_bar
 def get_models_and_params():
     """
     Returns a list of (name, model_instance, param_grid) for GridSearchCV.
-    Models: Decision Tree, Random Forest, KNN, SVM, Logistic Regression.
+    Models: Decision Tree, Random Forest, Extra Trees, KNN, SVM, Logistic Regression.
     """
-    cv = StratifiedKFold(n_splits=CV_FOLDS, shuffle=True, random_state=RANDOM_STATE)
     return [
         (
             "Decision Tree",
             DecisionTreeClassifier(random_state=RANDOM_STATE),
             {
-                "max_depth": [5, 10, 15, None],
+                "max_depth": [10, 15, 20, None],
                 "min_samples_split": [2, 5, 10],
                 "min_samples_leaf": [1, 2, 4],
             },
         ),
         (
             "Random Forest",
-            RandomForestClassifier(random_state=RANDOM_STATE, n_estimators=100),
+            RandomForestClassifier(random_state=RANDOM_STATE, n_jobs=-1),
             {
-                "n_estimators": [50, 100, 150],
-                "max_depth": [5, 10, 15, None],
+                "n_estimators": [100, 200, 300],
+                "max_depth": [10, 20, None],
+                "min_samples_split": [2, 5],
+                "min_samples_leaf": [1, 2],
+            },
+        ),
+        (
+            "Extra Trees",
+            ExtraTreesClassifier(random_state=RANDOM_STATE, n_jobs=-1),
+            {
+                "n_estimators": [100, 200, 300],
+                "max_depth": [10, 20, None],
                 "min_samples_split": [2, 5],
                 "min_samples_leaf": [1, 2],
             },
         ),
         (
             "KNN",
-            KNeighborsClassifier(),
+            KNeighborsClassifier(n_jobs=-1),
             {
-                "n_neighbors": [3, 5, 7, 11, 15, 21],
+                "n_neighbors": [3, 5, 7, 11],
                 "weights": ["uniform", "distance"],
                 "p": [1, 2],
             },
@@ -71,18 +80,17 @@ def get_models_and_params():
             "SVM",
             SVC(random_state=RANDOM_STATE, probability=True),
             {
-                "C": [0.1, 1, 10],
-                "gamma": ["scale", "auto", 0.01, 0.1],
+                "C": [1, 10, 50],
+                "gamma": ["scale", 0.01, 0.1],
                 "kernel": ["rbf"],
             },
         ),
         (
             "Logistic Regression",
-            LogisticRegression(random_state=RANDOM_STATE, max_iter=1000),
+            LogisticRegression(random_state=RANDOM_STATE, max_iter=2000, n_jobs=-1),
             {
-                "C": [0.01, 0.1, 1, 10],
+                "C": [0.1, 1, 10],
                 "solver": ["lbfgs"],
-                "multi_class": ["multinomial"],
             },
         ),
     ]

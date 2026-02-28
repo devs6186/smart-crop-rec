@@ -1,10 +1,10 @@
 {
   "best_model_name": "SVM",
-  "test_accuracy": 0.9795,
-  "test_f1_macro": 0.9795,
-  "cv_f1_mean": 0.9823,
-  "cv_f1_std": 0.0038,
-  "train_size": 1760,
+  "test_accuracy": 0.9595,
+  "test_f1_macro": 0.9598,
+  "cv_f1_mean": 0.9554,
+  "cv_f1_std": 0.0092,
+  "train_size": 4248,
   "feature_names": [
     "N",
     "P",
@@ -15,49 +15,56 @@
     "rainfall"
   ],
   "feature_importance": {
-    "N": 0.325455,
-    "P": 0.228864,
-    "K": 0.122955,
-    "temperature": 0.207727,
-    "humidity": 0.3575,
-    "ph": 0.082273,
-    "rainfall": 0.304773
+    "N": 0.444162,
+    "P": 0.243315,
+    "K": 0.353861,
+    "temperature": 0.312806,
+    "humidity": 0.353107,
+    "ph": 0.104896,
+    "rainfall": 0.358004
   },
   "comparison": [
     {
       "model": "SVM",
-      "test_accuracy": 0.9795,
-      "test_f1_macro": 0.9795,
-      "cv_f1_mean": 0.9823,
-      "cv_f1_std": 0.0038
+      "test_accuracy": 0.9595,
+      "test_f1_macro": 0.9598,
+      "cv_f1_mean": 0.9554,
+      "cv_f1_std": 0.0092
     },
     {
-      "model": "Logistic Regression",
-      "test_accuracy": 0.9773,
-      "test_f1_macro": 0.9771,
-      "cv_f1_mean": 0.9812,
-      "cv_f1_std": 0.0039
-    },
-    {
-      "model": "Random Forest",
-      "test_accuracy": 0.975,
-      "test_f1_macro": 0.9749,
-      "cv_f1_mean": 0.9777,
-      "cv_f1_std": 0.0038
-    },
-    {
-      "model": "KNN",
-      "test_accuracy": 0.9705,
-      "test_f1_macro": 0.9703,
-      "cv_f1_mean": 0.9771,
+      "model": "Extra Trees",
+      "test_accuracy": 0.9595,
+      "test_f1_macro": 0.9596,
+      "cv_f1_mean": 0.9577,
       "cv_f1_std": 0.0037
     },
     {
+      "model": "Random Forest",
+      "test_accuracy": 0.9539,
+      "test_f1_macro": 0.9541,
+      "cv_f1_mean": 0.9584,
+      "cv_f1_std": 0.0058
+    },
+    {
+      "model": "KNN",
+      "test_accuracy": 0.951,
+      "test_f1_macro": 0.9512,
+      "cv_f1_mean": 0.9497,
+      "cv_f1_std": 0.0082
+    },
+    {
+      "model": "Logistic Regression",
+      "test_accuracy": 0.9407,
+      "test_f1_macro": 0.9409,
+      "cv_f1_mean": 0.9385,
+      "cv_f1_std": 0.0044
+    },
+    {
       "model": "Decision Tree",
-      "test_accuracy": 0.9545,
-      "test_f1_macro": 0.9543,
-      "cv_f1_mean": 0.9465,
-      "cv_f1_std": 0.0096
+      "test_accuracy": 0.8927,
+      "test_f1_macro": 0.8937,
+      "cv_f1_mean": 0.8772,
+      "cv_f1_std": 0.0081
     }
   ]
 }

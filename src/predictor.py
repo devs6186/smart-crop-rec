@@ -34,6 +34,8 @@ from src.config import (
     W_SUITABILITY,
     W_PROFIT,
     W_RISK,
+    CROP_MIN_LAND_ACRES,
+    DEFAULT_MIN_LAND_ACRES,
 )
 from src.soil_health import get_soil_health_messages, get_crop_specific_suggestions
 from src.explainer import (
@@ -277,6 +279,23 @@ def predict_crop(
         })
 
     # ---------------------------------------------------------------------------
+    # Land-size filter: exclude crops that require more space than the user has
+    # (e.g. sugarcane needs 2+ acres; pulses work on 0.1 acres)
+    # ---------------------------------------------------------------------------
+    def _min_land_for_crop(crop: str) -> float:
+        return CROP_MIN_LAND_ACRES.get(crop.strip().lower(), DEFAULT_MIN_LAND_ACRES)
+
+    crop_data_filtered = [
+        c for c in crop_data
+        if land_size_acres >= _min_land_for_crop(c["crop"])
+    ]
+    if len(crop_data_filtered) >= TOP_K_CROPS:
+        crop_data = crop_data_filtered
+    elif len(crop_data_filtered) > 0:
+        crop_data = crop_data_filtered
+    # else: keep all (filter would leave 0; show best matches with note in UI)
+
+    # ---------------------------------------------------------------------------
     # Ranking
     # ---------------------------------------------------------------------------
     if mode == "profit":
@@ -286,6 +305,15 @@ def predict_crop(
         genuine_ranked = rank_by_profit(genuine)
         relaxed_ranked = rank_by_profit(relaxed)
         ranked = genuine_ranked + relaxed_ranked
+        for i, c in enumerate(ranked, 1):
+            c["rank"] = i
+    elif mode == "suitability":
+        # Top 5 strongest matches for the region: rank by suitability (ML confidence) only.
+        # Use crop name as tie-breaker so equal suitability always gives the same order.
+        ranked = sorted(
+            crop_data,
+            key=lambda x: (-x["suitability_conf"], x["crop"]),
+        )
         for i, c in enumerate(ranked, 1):
             c["rank"] = i
     else:
@@ -301,7 +329,10 @@ def predict_crop(
         for i, c in enumerate(crop_data):
             c["final_score"] = _balanced_score(norm_s[i], norm_p[i], norm_r[i])
 
-        ranked = sorted(crop_data, key=lambda x: x.get("final_score", 0), reverse=True)
+        ranked = sorted(
+            crop_data,
+            key=lambda x: (-x.get("final_score", 0), x["crop"]),
+        )
         for i, c in enumerate(ranked, 1):
             c["rank"] = i
 

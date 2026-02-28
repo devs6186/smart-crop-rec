@@ -494,6 +494,573 @@ DISEASE_RISK_DB: dict[str, list[dict]] = {
             ],
         },
     ],
+    # ── NEW CROPS (expanded from crop_params database) ──────────────────
+    "wheat": [
+        {
+            "name": "Wheat Rust (Puccinia triticina)",
+            "probability": 0.45, "severity": "high", "season": "Rabi",
+            "prevention": [
+                "Use rust-resistant varieties (HD-2967, PBW-343).",
+                "Spray Propiconazole at first rust signs.",
+                "Avoid late sowing in rust-prone zones.",
+            ],
+        },
+        {
+            "name": "Karnal Bunt (Tilletia indica)",
+            "probability": 0.25, "severity": "medium", "season": "Rabi",
+            "prevention": [
+                "Seed treatment with Carboxin + Thiram.",
+                "Use certified disease-free seed.",
+                "Avoid irrigation at heading stage during humid weather.",
+            ],
+        },
+    ],
+    "potato": [
+        {
+            "name": "Late Blight (Phytophthora infestans)",
+            "probability": 0.55, "severity": "high", "season": "Rabi",
+            "prevention": [
+                "Spray Mancozeb or Metalaxyl + Mancozeb at 7-day intervals.",
+                "Use blight-resistant varieties (Kufri Jyoti, Kufri Bahar).",
+                "Destroy volunteer plants and infected tubers.",
+            ],
+        },
+        {
+            "name": "Early Blight (Alternaria solani)",
+            "probability": 0.40, "severity": "medium", "season": "Rabi",
+            "prevention": [
+                "Spray Mancozeb or Chlorothalonil at first symptom.",
+                "Maintain adequate soil moisture.",
+                "Use healthy certified seed tubers.",
+            ],
+        },
+    ],
+    "sugarcane": [
+        {
+            "name": "Red Rot (Colletotrichum falcatum)",
+            "probability": 0.45, "severity": "high", "season": "Year-round",
+            "prevention": [
+                "Use disease-free setts from resistant varieties (Co 86032).",
+                "Sett treatment with Carbendazim before planting.",
+                "Destroy infected canes and ratoon debris.",
+            ],
+        },
+        {
+            "name": "Sugarcane Top Borer (Scirpophaga excerptalis)",
+            "probability": 0.40, "severity": "medium", "season": "Kharif",
+            "prevention": [
+                "Release Trichogramma parasitoids.",
+                "Remove and destroy dead hearts early.",
+                "Avoid excess nitrogen fertilization.",
+            ],
+        },
+    ],
+    "groundnut": [
+        {
+            "name": "Tikka Disease / Leaf Spot (Cercospora)",
+            "probability": 0.45, "severity": "medium", "season": "Kharif",
+            "prevention": [
+                "Spray Mancozeb or Chlorothalonil at 35 DAS.",
+                "Use tolerant varieties (ICGV 91114).",
+                "Maintain proper plant spacing.",
+            ],
+        },
+        {
+            "name": "Stem Rot (Sclerotium rolfsii)",
+            "probability": 0.35, "severity": "high", "season": "Kharif",
+            "prevention": [
+                "Seed treatment with Trichoderma viride.",
+                "Deep ploughing to bury sclerotia.",
+                "Crop rotation with cereals.",
+            ],
+        },
+    ],
+    "mustard": [
+        {
+            "name": "Alternaria Blight (Alternaria brassicae)",
+            "probability": 0.50, "severity": "high", "season": "Rabi",
+            "prevention": [
+                "Spray Mancozeb at flowering and pod formation.",
+                "Use tolerant varieties (Pusa Bold).",
+                "Destroy crop debris after harvest.",
+            ],
+        },
+        {
+            "name": "Aphid (Lipaphis erysimi)",
+            "probability": 0.55, "severity": "medium", "season": "Rabi",
+            "prevention": [
+                "Spray Dimethoate or Imidacloprid at ETL.",
+                "Early sowing (October) avoids peak aphid season.",
+                "Conserve natural predators like ladybird beetles.",
+            ],
+        },
+    ],
+    "onion": [
+        {
+            "name": "Purple Blotch (Alternaria porri)",
+            "probability": 0.45, "severity": "medium", "season": "Rabi/Kharif",
+            "prevention": [
+                "Spray Mancozeb + Carbendazim at 10-day intervals.",
+                "Ensure proper drainage to avoid waterlogging.",
+                "Use disease-free transplants.",
+            ],
+        },
+        {
+            "name": "Thrips (Thrips tabaci)",
+            "probability": 0.50, "severity": "medium", "season": "Rabi",
+            "prevention": [
+                "Spray Fipronil or Spinosad at nymph stage.",
+                "Use blue sticky traps for monitoring.",
+                "Overhead irrigation helps reduce thrips population.",
+            ],
+        },
+    ],
+    "bajra": [
+        {
+            "name": "Downy Mildew (Sclerospora graminicola)",
+            "probability": 0.45, "severity": "high", "season": "Kharif",
+            "prevention": [
+                "Seed treatment with Metalaxyl.",
+                "Use resistant hybrids (HHB 67, ICTP 8203).",
+                "Rogue out infected plants early.",
+            ],
+        },
+        {
+            "name": "Ergot (Claviceps fusiformis)",
+            "probability": 0.30, "severity": "medium", "season": "Kharif",
+            "prevention": [
+                "Spray Mancozeb at flowering stage.",
+                "Collect and destroy honeydew-infected earheads.",
+            ],
+        },
+    ],
+    "jowar": [
+        {
+            "name": "Grain Mold (Fusarium/Aspergillus spp.)",
+            "probability": 0.40, "severity": "medium", "season": "Kharif",
+            "prevention": [
+                "Use mold-tolerant varieties (CSH-14, CSV-17).",
+                "Harvest at physiological maturity; dry immediately.",
+                "Avoid late sowing that exposes grain to monsoon end.",
+            ],
+        },
+        {
+            "name": "Shoot Fly (Atherigona soccata)",
+            "probability": 0.50, "severity": "high", "season": "Kharif",
+            "prevention": [
+                "Early sowing to avoid peak fly activity.",
+                "Seed treatment with Imidacloprid.",
+                "Use fish-meal traps for adult fly monitoring.",
+            ],
+        },
+    ],
+    "barley": [
+        {
+            "name": "Stripe Rust (Puccinia striiformis)",
+            "probability": 0.40, "severity": "high", "season": "Rabi",
+            "prevention": [
+                "Use resistant varieties (BH-393, Jyoti).",
+                "Spray Propiconazole at first sign of pustules.",
+                "Avoid late sowing in high-altitude areas.",
+            ],
+        },
+        {
+            "name": "Covered Smut (Ustilago hordei)",
+            "probability": 0.25, "severity": "low", "season": "Rabi",
+            "prevention": [
+                "Seed treatment with Carboxin or Thiram.",
+                "Use certified smut-free seed.",
+            ],
+        },
+    ],
+    "ragi": [
+        {
+            "name": "Blast (Pyricularia grisea)",
+            "probability": 0.50, "severity": "high", "season": "Kharif",
+            "prevention": [
+                "Use blast-resistant varieties (GPU-28, MR-1).",
+                "Spray Tricyclazole at neck blast stage.",
+                "Avoid excessive nitrogen fertilization.",
+            ],
+        },
+        {
+            "name": "Aphid (Hysteroneura setariae)",
+            "probability": 0.30, "severity": "low", "season": "Kharif",
+            "prevention": [
+                "Spray Dimethoate at ETL.",
+                "Encourage natural predators.",
+            ],
+        },
+    ],
+    "soyabean": [
+        {
+            "name": "Rust (Phakopsora pachyrhizi)",
+            "probability": 0.45, "severity": "high", "season": "Kharif",
+            "prevention": [
+                "Spray Hexaconazole or Propiconazole at R3 stage.",
+                "Use tolerant varieties (JS 335, JS 9560).",
+                "Early sowing avoids peak rust incidence.",
+            ],
+        },
+        {
+            "name": "Yellow Mosaic Virus (YMV)",
+            "probability": 0.35, "severity": "medium", "season": "Kharif",
+            "prevention": [
+                "Control whitefly vectors with Thiamethoxam.",
+                "Use YMV-resistant varieties.",
+                "Remove infected plants to reduce virus source.",
+            ],
+        },
+    ],
+    "sunflower": [
+        {
+            "name": "Alternaria Blight (Alternaria helianthi)",
+            "probability": 0.45, "severity": "medium", "season": "Kharif/Rabi",
+            "prevention": [
+                "Spray Mancozeb at disease initiation.",
+                "Use tolerant hybrids.",
+                "Maintain optimum plant population.",
+            ],
+        },
+        {
+            "name": "Head Rot (Sclerotinia sclerotiorum)",
+            "probability": 0.30, "severity": "high", "season": "Rabi",
+            "prevention": [
+                "Avoid overhead irrigation during flowering.",
+                "Deep ploughing to bury sclerotia.",
+                "Spray Carbendazim at head formation.",
+            ],
+        },
+    ],
+    "sesamum": [
+        {
+            "name": "Phytophthora Blight (Phytophthora parasitica)",
+            "probability": 0.35, "severity": "medium", "season": "Kharif",
+            "prevention": [
+                "Seed treatment with Metalaxyl.",
+                "Ensure proper field drainage.",
+                "Avoid waterlogged conditions.",
+            ],
+        },
+        {
+            "name": "Gall Fly (Asphondylia sesami)",
+            "probability": 0.30, "severity": "low", "season": "Kharif",
+            "prevention": [
+                "Spray Dimethoate at bud stage.",
+                "Collect and destroy infested buds.",
+            ],
+        },
+    ],
+    "castor seed": [
+        {
+            "name": "Botrytis Grey Rot (Botrytis ricini)",
+            "probability": 0.40, "severity": "medium", "season": "Kharif",
+            "prevention": [
+                "Spray Carbendazim or Thiophanate-methyl at spike emergence.",
+                "Maintain proper plant spacing for ventilation.",
+                "Avoid overhead irrigation during flowering.",
+            ],
+        },
+        {
+            "name": "Semilooper (Achaea janata)",
+            "probability": 0.45, "severity": "medium", "season": "Kharif",
+            "prevention": [
+                "Spray Quinalphos or Chlorpyriphos at larval stage.",
+                "Hand-pick and destroy larvae when numbers are low.",
+                "Use NPV (Nuclear Polyhedrosis Virus) bio-insecticide.",
+            ],
+        },
+    ],
+    "dry chillies": [
+        {
+            "name": "Anthracnose / Fruit Rot (Colletotrichum capsici)",
+            "probability": 0.50, "severity": "high", "season": "Kharif",
+            "prevention": [
+                "Seed treatment with Thiram + Carbendazim.",
+                "Spray Mancozeb or Copper oxychloride at 10-day intervals.",
+                "Use tolerant varieties (Pusa Jwala).",
+            ],
+        },
+        {
+            "name": "Thrips (Scirtothrips dorsalis)",
+            "probability": 0.55, "severity": "medium", "season": "Year-round",
+            "prevention": [
+                "Spray Fipronil or Spinosad.",
+                "Use blue sticky traps.",
+                "Intercrop with marigold as trap crop.",
+            ],
+        },
+    ],
+    "ginger": [
+        {
+            "name": "Soft Rot / Rhizome Rot (Pythium aphanidermatum)",
+            "probability": 0.50, "severity": "high", "season": "Kharif",
+            "prevention": [
+                "Treat seed rhizome with Mancozeb + Carbendazim for 30 min.",
+                "Ensure raised beds with good drainage.",
+                "Apply Trichoderma viride to soil before planting.",
+            ],
+        },
+        {
+            "name": "Shoot Borer (Conogethes punctiferalis)",
+            "probability": 0.35, "severity": "medium", "season": "Kharif",
+            "prevention": [
+                "Spray Dimethoate or Malathion at first sign of boring.",
+                "Prune and destroy infected tillers.",
+            ],
+        },
+    ],
+    "turmeric": [
+        {
+            "name": "Rhizome Rot (Pythium/Fusarium spp.)",
+            "probability": 0.45, "severity": "high", "season": "Kharif",
+            "prevention": [
+                "Seed treatment with Mancozeb before planting.",
+                "Apply Trichoderma-enriched FYM to soil.",
+                "Avoid waterlogging; use raised beds.",
+            ],
+        },
+        {
+            "name": "Leaf Blotch (Taphrina maculans)",
+            "probability": 0.30, "severity": "low", "season": "Kharif",
+            "prevention": [
+                "Spray Mancozeb or Copper oxychloride.",
+                "Maintain proper drainage and spacing.",
+            ],
+        },
+    ],
+    "garlic": [
+        {
+            "name": "Purple Blotch (Alternaria porri)",
+            "probability": 0.40, "severity": "medium", "season": "Rabi",
+            "prevention": [
+                "Spray Mancozeb + Carbendazim at 10-day intervals.",
+                "Avoid overhead irrigation; use drip.",
+                "Use disease-free planting cloves.",
+            ],
+        },
+        {
+            "name": "Stem/Bulb Nematode (Ditylenchus dipsaci)",
+            "probability": 0.25, "severity": "medium", "season": "Rabi",
+            "prevention": [
+                "Hot water treatment of cloves (49C for 20 min) before planting.",
+                "Crop rotation with non-allium crops for 3 years.",
+            ],
+        },
+    ],
+    "coriander": [
+        {
+            "name": "Stem Gall (Protomyces macrosporus)",
+            "probability": 0.40, "severity": "medium", "season": "Rabi",
+            "prevention": [
+                "Use disease-free seed.",
+                "Spray Mancozeb at early growth stage.",
+                "Crop rotation with cereals.",
+            ],
+        },
+        {
+            "name": "Wilt (Fusarium oxysporum)",
+            "probability": 0.30, "severity": "medium", "season": "Rabi",
+            "prevention": [
+                "Seed treatment with Trichoderma viride.",
+                "Avoid waterlogged soils.",
+            ],
+        },
+    ],
+    "black pepper": [
+        {
+            "name": "Quick Wilt (Phytophthora capsici)",
+            "probability": 0.50, "severity": "high", "season": "Monsoon",
+            "prevention": [
+                "Apply Bordeaux mixture (1%) at onset of monsoon.",
+                "Improve drainage around vine base.",
+                "Use tolerant varieties (Panniyur-1).",
+            ],
+        },
+        {
+            "name": "Pollu Disease (Colletotrichum gloeosporioides)",
+            "probability": 0.35, "severity": "medium", "season": "Monsoon",
+            "prevention": [
+                "Spray Bordeaux mixture during spike formation.",
+                "Maintain proper shade management.",
+            ],
+        },
+    ],
+    "cardamom": [
+        {
+            "name": "Capsule Rot (Phytophthora meadii)",
+            "probability": 0.40, "severity": "high", "season": "Monsoon",
+            "prevention": [
+                "Spray Copper oxychloride at onset of monsoon.",
+                "Improve drainage and reduce shade density.",
+                "Remove and destroy infected panicles.",
+            ],
+        },
+        {
+            "name": "Thrips (Sciothrips cardamomi)",
+            "probability": 0.50, "severity": "medium", "season": "Year-round",
+            "prevention": [
+                "Spray Dimethoate at panicle initiation.",
+                "Maintain optimum shade (40-60%).",
+                "Remove weeds that harbor thrips.",
+            ],
+        },
+    ],
+    "arecanut": [
+        {
+            "name": "Koleroga / Fruit Rot (Phytophthora arecae)",
+            "probability": 0.45, "severity": "high", "season": "Monsoon",
+            "prevention": [
+                "Spray Bordeaux mixture (1%) before and during monsoon.",
+                "Collect and destroy fallen diseased nuts.",
+                "Ensure drainage around palm base.",
+            ],
+        },
+        {
+            "name": "Yellow Leaf Disease (Phytoplasma)",
+            "probability": 0.30, "severity": "high", "season": "Year-round",
+            "prevention": [
+                "Remove and destroy severely infected palms.",
+                "Control leafhopper vectors with Imidacloprid.",
+                "Apply balanced nutrition with micronutrients.",
+            ],
+        },
+    ],
+    "cashewnut": [
+        {
+            "name": "Tea Mosquito Bug (Helopeltis antonii)",
+            "probability": 0.55, "severity": "high", "season": "Flowering",
+            "prevention": [
+                "Spray Carbaryl or Lambda-cyhalothrin at flushing stage.",
+                "Maintain canopy hygiene; prune overcrowded branches.",
+                "Conserve natural enemies (Oecophylla smaragdina ants).",
+            ],
+        },
+        {
+            "name": "Anthracnose (Colletotrichum gloeosporioides)",
+            "probability": 0.35, "severity": "medium", "season": "Monsoon",
+            "prevention": [
+                "Spray Carbendazim at new flush emergence.",
+                "Prune and burn infected twigs.",
+            ],
+        },
+    ],
+    "cowpea": [
+        {
+            "name": "Mosaic Virus (CpMV)",
+            "probability": 0.35, "severity": "medium", "season": "Kharif",
+            "prevention": [
+                "Use virus-free seed from reliable sources.",
+                "Control aphid vectors with Imidacloprid.",
+                "Remove and destroy infected plants.",
+            ],
+        },
+        {
+            "name": "Pod Borer (Maruca vitrata)",
+            "probability": 0.40, "severity": "medium", "season": "Kharif",
+            "prevention": [
+                "Spray Emamectin benzoate at flowering.",
+                "Use pheromone traps for monitoring.",
+                "Intercrop with sorghum as barrier crop.",
+            ],
+        },
+    ],
+    "peas": [
+        {
+            "name": "Powdery Mildew (Erysiphe pisi)",
+            "probability": 0.50, "severity": "medium", "season": "Rabi",
+            "prevention": [
+                "Spray Wettable Sulphur or Karathane at first sign.",
+                "Use resistant varieties (Arkel, Azad P-1).",
+                "Early sowing to escape late-season humidity.",
+            ],
+        },
+        {
+            "name": "Fusarium Wilt (Fusarium oxysporum f.sp. pisi)",
+            "probability": 0.30, "severity": "medium", "season": "Rabi",
+            "prevention": [
+                "Seed treatment with Trichoderma + Carbendazim.",
+                "Crop rotation with cereals for 3 years.",
+            ],
+        },
+    ],
+    "tobacco": [
+        {
+            "name": "Tobacco Mosaic Virus (TMV)",
+            "probability": 0.40, "severity": "high", "season": "Kharif",
+            "prevention": [
+                "Use TMV-resistant varieties.",
+                "Workers should wash hands before handling plants.",
+                "Remove infected plants immediately to reduce spread.",
+            ],
+        },
+        {
+            "name": "Black Shank (Phytophthora nicotianae)",
+            "probability": 0.35, "severity": "high", "season": "Kharif",
+            "prevention": [
+                "Use resistant varieties.",
+                "Soil fumigation with Metam sodium.",
+                "Improve field drainage; avoid waterlogging.",
+            ],
+        },
+    ],
+    "sweet potato": [
+        {
+            "name": "Sweet Potato Weevil (Cylas formicarius)",
+            "probability": 0.50, "severity": "high", "season": "Year-round",
+            "prevention": [
+                "Plant weevil-free vine cuttings.",
+                "Earth up vines to cover exposed tubers.",
+                "Use pheromone traps for monitoring.",
+            ],
+        },
+        {
+            "name": "Scab (Elsinoe batatas)",
+            "probability": 0.25, "severity": "low", "season": "Kharif",
+            "prevention": [
+                "Use disease-free planting material.",
+                "Spray Mancozeb at vine stage.",
+            ],
+        },
+    ],
+    "tapioca": [
+        {
+            "name": "Cassava Mosaic Virus (CMV)",
+            "probability": 0.40, "severity": "high", "season": "Year-round",
+            "prevention": [
+                "Use mosaic-free stem cuttings from certified sources.",
+                "Control whitefly vectors with neem oil or Imidacloprid.",
+                "Remove and destroy infected plants.",
+            ],
+        },
+        {
+            "name": "Tuber Rot (Phytophthora spp.)",
+            "probability": 0.30, "severity": "medium", "season": "Kharif",
+            "prevention": [
+                "Ensure good field drainage.",
+                "Harvest at right maturity; avoid mechanical damage.",
+            ],
+        },
+    ],
+    "mesta": [
+        {
+            "name": "Stem Rot (Macrophomina phaseolina)",
+            "probability": 0.35, "severity": "medium", "season": "Kharif",
+            "prevention": [
+                "Seed treatment with Thiram + Carbendazim.",
+                "Avoid water stagnation.",
+                "Deep ploughing to bury inoculum.",
+            ],
+        },
+        {
+            "name": "Spiral Borer (Agrilus acutus)",
+            "probability": 0.30, "severity": "medium", "season": "Kharif",
+            "prevention": [
+                "Early sowing in March-April to avoid peak borer.",
+                "Collect and destroy infested stems.",
+            ],
+        },
+    ],
 }
 
 # Severity → numeric score for composite calculation
