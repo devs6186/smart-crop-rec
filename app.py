@@ -28,40 +28,10 @@ from src.market_price_fetcher import get_data_status
 
 
 # ---------------------------------------------------------------------------
-# Default soil/climate: vary by state so recommendations differ by region
-# (Model input is only N,P,K,temp,humidity,ph,rainfall — same input → same top crops)
-# Zone values aligned with training data ranges so model sees clearly different inputs.
+# Soil/climate by region — see src.zone_soil for logic (shared with tests)
 # ---------------------------------------------------------------------------
 
-# Agro-climatic zone defaults — deliberately distinct (training data: rice≈high rain/humidity, grapes≈low rain/humidity, apple≈cool, etc.)
-# N,P,K 0–140/145/205; temp 15–45°C; humidity 15–100%; ph 3.5–9.5; rainfall 20–300 mm
-_ZONE_DEFAULTS = {
-    "arid_nw":       {"N": 20, "P": 28, "K": 32, "temperature": 32.0, "humidity": 44.0, "ph": 7.6, "rainfall": 28.0},   # grapes/muskmelon-like: Rajasthan, Punjab, Haryana
-    "eastern_humid": {"N": 85, "P": 42, "K": 38, "temperature": 21.0, "humidity": 90.0, "ph": 5.7, "rainfall": 295.0},  # rice/blackgram-like: WB, Odisha, Assam, NE
-    "southern":      {"N": 72, "P": 48, "K": 45, "temperature": 24.0, "humidity": 80.0, "ph": 6.2, "rainfall": 195.0},   # banana/papaya-like: AP, TN, Karnataka, Telangana
-    "west_coast":    {"N": 84, "P": 40, "K": 36, "temperature": 20.2, "humidity": 91.0, "ph": 5.6, "rainfall": 285.0},   # blackgram/mungbean-like: Kerala, Goa
-    "central":       {"N": 52, "P": 44, "K": 41, "temperature": 25.5, "humidity": 70.0, "ph": 6.1, "rainfall": 92.0},   # chickpea/mango-like: MP, UP, Bihar, Chhattisgarh
-    "himalayan":     {"N": 87, "P": 42, "K": 40, "temperature": 18.5, "humidity": 87.0, "ph": 5.9, "rainfall": 255.0},   # apple/lentil-like: J&K, HP, Uttarakhand, Sikkim
-    "western_dry":   {"N": 40, "P": 36, "K": 40, "temperature": 27.0, "humidity": 59.0, "ph": 6.9, "rainfall": 55.0},   # cotton/coffee-like: Gujarat, Maharashtra interior
-}
-_STATE_ZONE = {
-    "Rajasthan": "arid_nw", "Haryana": "arid_nw", "Punjab": "arid_nw", "Delhi": "arid_nw", "Chandigarh": "arid_nw",
-    "West Bengal": "eastern_humid", "Odisha": "eastern_humid", "Assam": "eastern_humid",
-    "Arunachal Pradesh": "eastern_humid", "Manipur": "eastern_humid", "Meghalaya": "eastern_humid",
-    "Mizoram": "eastern_humid", "Nagaland": "eastern_humid", "Tripura": "eastern_humid",
-    "Andhra Pradesh": "southern", "Telangana": "southern", "Karnataka": "southern", "Tamil Nadu": "southern", "Puducherry": "southern",
-    "Kerala": "west_coast", "Goa": "west_coast",
-    "Maharashtra": "western_dry", "Gujarat": "western_dry", "Dadra and Nagar Haveli and Daman and Diu": "western_dry",
-    "Madhya Pradesh": "central", "Chhattisgarh": "central", "Uttar Pradesh": "central", "Bihar": "central", "Jharkhand": "central",
-    "Himachal Pradesh": "himalayan", "Uttarakhand": "himalayan", "Jammu and Kashmir": "himalayan", "Ladakh": "himalayan", "Sikkim": "himalayan",
-    "Andaman and Nicobar Islands": "eastern_humid", "Lakshadweep": "west_coast",
-}
-
-
-def _state_offset(state: str, feature: str) -> float:
-    """Small deterministic offset per state so same zone still gets slightly different values."""
-    h = hash((state, feature)) % 100
-    return (h - 50) / 50.0  # -1.0 to +1.0
+from src.zone_soil import get_default_soil_climate
 
 
 @st.cache_data
@@ -77,27 +47,6 @@ def get_global_soil_climate():
             "N": 50.0, "P": 50.0, "K": 50.0,
             "temperature": 25.0, "humidity": 65.0, "ph": 6.5, "rainfall": 120.0,
         }
-
-
-def get_default_soil_climate(state: str | None):
-    """State-specific soil/climate so ML recommendations vary by region. Values passed correctly to predictor."""
-    if not state or state not in _STATE_ZONE:
-        return get_global_soil_climate()
-    zone = _STATE_ZONE[state]
-    base = _ZONE_DEFAULTS[zone]
-    # Add small state-level offset so each state gets unique inputs (more crop variety)
-    out = {}
-    for k in FEATURE_COLUMNS:
-        v = base[k]
-        delta = _state_offset(state, k)
-        if k in ("temperature", "humidity", "ph"):
-            v = max(15.0, min(45.0 if k == "temperature" else 100.0 if k == "humidity" else 9.5, v + delta * 2))
-        elif k == "rainfall":
-            v = max(20.0, min(300.0, v + delta * 15))
-        else:
-            v = max(0, min(205 if k == "K" else 145 if k == "P" else 140, v + int(delta * 8)))
-        out[k] = round(v, 2) if isinstance(v, float) else v
-    return out
 
 
 def _risk_colour(label: str) -> str:
@@ -230,8 +179,8 @@ def main():
         factor = get_bigha_factor(state)
         st.caption(f"1 bigha = {factor} acres in {state}")
 
-    # State-specific soil/climate (after state is set) so recommendations vary by region
-    default_soil = get_default_soil_climate(state)
+    # State+district-specific soil/climate so recommendations vary by region
+    default_soil = get_default_soil_climate(state, district)
 
     st.divider()
 
@@ -254,7 +203,7 @@ def main():
                     land_size_bigha=land_size_bigha,
                     state=state,
                     district=district,
-                    scoring_mode="balanced",  # advisory score, not profit
+                    scoring_mode="suitability",  # top 5 strongest matches for the region
                 )
                 st.session_state["last_result"] = result
             except Exception as exc:
@@ -281,6 +230,7 @@ def main():
     if region["district"] != "Not specified":
         loc += " / " + region["district"]
     c3.metric("Location", loc)
+    st.caption("Recommendations are tailored to your land size, state, and district — crops requiring more space are excluded for small holdings.")
 
     # Soil nutrient distribution (crop-average reference) — only after analysis
     N, P, K = default_soil["N"], default_soil["P"], default_soil["K"]
@@ -298,7 +248,7 @@ def main():
     # -----------------------------------------------------------------------
     # Top 5 crops — advisory only (no profit)
     # -----------------------------------------------------------------------
-    st.subheader("Top 5 recommended crops (by advisory score)")
+    st.subheader("Top 5 recommended crops (by suitability — strongest matches first)")
 
     medals = {1: "🥇", 2: "🥈", 3: "🥉", 4: "#4", 5: "#5"}
 
@@ -387,13 +337,39 @@ def main():
     _render_sidebar()
 
 
+def _get_engine_stats():
+    """Aggregate engine data stats: records, states, crops. Falls back to ML model stats when market data absent."""
+    status = get_data_status()
+    if status.get("exists") and status.get("rows", 0) > 0:
+        return {
+            "records": status["rows"],
+            "states": status.get("states", "?"),
+            "crops": status.get("crops", "?"),
+        }
+    # Fallback: ML model stats
+    try:
+        meta_path = MODELS_DIR / METADATA_FNAME
+        if meta_path.exists():
+            with open(meta_path) as f:
+                meta = json.load(f)
+            train_size = meta.get("train_size", 0)
+        else:
+            train_size = 0
+        model, _, label_encoder, _ = load_artifacts()
+        num_crops = len(label_encoder.classes_) if label_encoder else 0
+        return {"records": train_size, "states": "—", "crops": num_crops}
+    except Exception:
+        return {"records": "?", "states": "?", "crops": "?"}
+
+
 def _render_sidebar():
     sb = st.sidebar
     sb.divider()
     sb.markdown("**Data used for analysis**")
-    status = get_data_status()
-    if status["exists"] and status["rows"] > 0:
-        sb.caption(f"{status['rows']:,} records in total used by the engine (across {status.get('states', '?')} states)")
+    stats = _get_engine_stats()
+    sb.caption(f"**Total records:** {stats['records']:,}" if isinstance(stats["records"], int) else f"**Total records:** {stats['records']}")
+    sb.caption(f"**States:** {stats['states']}")
+    sb.caption(f"**Total crops:** {stats['crops']}")
     with sb.expander("Refresh via data.gov.in API"):
         st.write("Paste your data.gov.in API key (register at data.gov.in → My Account)")
         api_key_input = st.text_input("API Key", type="password")

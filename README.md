@@ -11,7 +11,7 @@ An **ML-based advisory system** that recommends suitable crops for Indian farmer
 - **Indian units**: Production and sale quantity in **kg**; prices in **₹/kg**; land in **bigha** (with acres shown). No quintals or tons.
 - **Per-crop details**: Suitability %, estimated production (kg), market price (₹/kg), estimated sale quantity (kg), risk score, disease/pest risks, prevention measures, and soil-based growing tips.
 - **Soil nutrient view**: After analysis, a soil nutrient distribution (N, P, K) chart is shown as a crop-average reference for the selected region.
-- **Data used for analysis**: Sidebar shows how many **records in total** are used by the engine (e.g. market/yield data across states). Optional refresh via **data.gov.in** API.
+- **Data used for analysis**: Sidebar shows **total records**, **number of states**, and **total crops** used by the engine. Optional refresh via **data.gov.in** API.
 - **Dark theme** UI; optional lighter theme in code.
 
 ---
@@ -26,10 +26,11 @@ Choosing the wrong crop for a given region and land leads to lower yield and was
 
 1. **Data**  
    - **Crop recommendation dataset**: N, P, K, temperature, humidity, ph, rainfall → crop label (e.g. [Kaggle – Crop Recommendation Dataset](https://www.kaggle.com/datasets/atharvaingle/crop-recommendation-dataset)).  
+   - **Adding more training data**: Put any extra CSVs with the **same columns** (N, P, K, temperature, humidity, ph, rainfall, label) in `data/raw/`. The pipeline merges all compatible CSVs when you run `python run_pipeline.py`, so you can keep `Crop_Recommendation.csv` and add e.g. `crop_extra.csv`.  
    - **Regional data** (optional): `state_wise_yield.csv`, `market_prices.csv`, `cost_of_cultivation.csv`, `climate_vulnerability.csv` in `data/raw/` for state/district-aware yield, price, and risk. If absent, embedded national averages are used.
 
 2. **Region-specific inputs**  
-   - States are mapped to **agro-climatic zones** (arid NW, eastern humid, southern, west coast, central, Himalayan, western dry). Each zone has distinct default N, P, K, temperature, humidity, ph, rainfall (aligned with training data). A small **state-level offset** ensures different states get slightly different inputs so the ML model sees varied conditions and recommends different crops.
+   - States are mapped to **agro-climatic zones** (arid NW, eastern humid, southern, west coast, central, Himalayan, western dry). Each zone has distinct default N, P, K, temperature, humidity, ph, rainfall (aligned with training data). **State + district offsets** ensure different regions get meaningfully different inputs so recommendations vary by location and land size.
 
 3. **ML pipeline**  
    - **Preprocessing**: Label encoding, `StandardScaler` on training set, stratified train–test split.  
@@ -62,9 +63,10 @@ SMART CROP REC/
 ├── data/raw/              # Crop_Recommendation.csv (or sample); optional: state_wise_yield, market_prices, cost_of_cultivation, climate_vulnerability
 ├── models/                # model.joblib, scaler.joblib, label_encoder.joblib, metadata.json (after run_pipeline.py)
 ├── reports/figures/       # EDA and evaluation plots
-├── src/                   # config, data_loader, preprocess, train, evaluate, predictor, region_data_loader, profit_engine, risk_engine, soil_health, explainer, market_price_fetcher
+├── src/                   # config, data_loader, zone_soil, preprocess, train, evaluate, predictor, region_data_loader, profit_engine, risk_engine, soil_health, explainer, market_price_fetcher
 ├── app.py                 # Streamlit UI — Smart Agriculture Advisory System
 ├── run_pipeline.py        # One-command ML pipeline
+├── tests/                 # Crop variety tests (state, district, land size)
 ├── requirements.txt
 ├── README.md
 ├── REPORT.md
@@ -108,6 +110,14 @@ python -m streamlit run app.py
 ```
 
 Then open the URL (e.g. http://localhost:8501). Select **state**, **district**, and **land size (bigha)** → click **Proceed to Analysis** → view top 5 crops, production (kg), price (₹/kg), risk, diseases, and prevention. Use **Start new analysis** to run again.
+
+### Run tests
+
+```bash
+python -m pytest tests/test_crop_variety.py -v
+```
+
+Tests verify that crop recommendations vary by state, district, and land size (not the same 5 crops for all regions).
 
 ---
 
