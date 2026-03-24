@@ -136,15 +136,18 @@ def apply_theme():
     /* ── Buttons ── */
     .stButton > button {
         background: #34d399 !important;
-        color: #0a0a0a !important;
+        color: #000000 !important;
         border: none !important;
         border-radius: 6px !important;
-        font-weight: 700 !important;
-        letter-spacing: 0.04em;
+        font-weight: 800 !important;
+        font-size: 1.05rem !important;
+        letter-spacing: 0.05em;
+        padding: 0.75rem 1.5rem !important;
         transition: all 0.2s ease;
     }
     .stButton > button:hover {
         background: #6ee7b7 !important;
+        color: #000000 !important;
         transform: translateY(-1px);
         box-shadow: 0 4px 20px rgba(52, 211, 153, 0.25);
     }
@@ -300,21 +303,27 @@ def main():
             "State",
             options=["— Select State —"] + INDIAN_STATES,
             index=0,
+            key="state_select",
         )
     state = None if state_raw == "— Select State —" else state_raw
 
+    # Reset district when state changes
+    if "prev_state" not in st.session_state:
+        st.session_state["prev_state"] = state
+    if st.session_state["prev_state"] != state:
+        st.session_state["prev_state"] = state
+        st.session_state.pop("last_result", None)
+
     if state is None:
-        district_options = []
+        district_options = ["Select state first"]
     else:
         district_options = DISTRICTS_BY_STATE.get(state, DEFAULT_DISTRICTS)
 
     with col2:
         district_raw = st.selectbox(
             "District",
-            options=(district_options if district_options else ["Select state first"]),
+            options=district_options,
             disabled=(state is None),
-            index=0,
-            key=f"district_{state}",
         )
     district = None
     if district_raw and district_raw not in (
@@ -343,25 +352,7 @@ def main():
 
     st.divider()
 
-    st.markdown(
-        """<style>
-        div[data-testid="stButton"] > button[kind="primary"] {
-            background: #34d399 !important;
-            color: #000000 !important;
-            font-size: 1.1rem !important;
-            font-weight: 800 !important;
-            letter-spacing: 0.06em !important;
-            padding: 0.8rem 2rem !important;
-            border: none !important;
-        }
-        div[data-testid="stButton"] > button[kind="primary"]:hover {
-            background: #6ee7b7 !important;
-            color: #000000 !important;
-        }
-        </style>""",
-        unsafe_allow_html=True,
-    )
-    proceed = st.button("Proceed to Analysis", type="primary", use_container_width=True)
+    proceed = st.button("✦  PROCEED TO ANALYSIS", type="primary", use_container_width=True)
 
     # -----------------------------------------------------------------------
     # After "Proceed to Analysis": run prediction and show analysis
