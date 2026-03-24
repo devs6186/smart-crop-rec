@@ -313,6 +313,8 @@ def main():
             "District",
             options=(district_options if district_options else ["Select state first"]),
             disabled=(state is None),
+            index=0,
+            key=f"district_{state}",
         )
     district = None
     if district_raw and district_raw not in (
@@ -341,6 +343,24 @@ def main():
 
     st.divider()
 
+    st.markdown(
+        """<style>
+        div[data-testid="stButton"] > button[kind="primary"] {
+            background: #34d399 !important;
+            color: #000000 !important;
+            font-size: 1.1rem !important;
+            font-weight: 800 !important;
+            letter-spacing: 0.06em !important;
+            padding: 0.8rem 2rem !important;
+            border: none !important;
+        }
+        div[data-testid="stButton"] > button[kind="primary"]:hover {
+            background: #6ee7b7 !important;
+            color: #000000 !important;
+        }
+        </style>""",
+        unsafe_allow_html=True,
+    )
     proceed = st.button("Proceed to Analysis", type="primary", use_container_width=True)
 
     # -----------------------------------------------------------------------
