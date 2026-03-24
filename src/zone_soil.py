@@ -4,6 +4,8 @@ State + district → N, P, K, temperature, humidity, ph, rainfall.
 Used by app and tests; no Streamlit dependency.
 """
 
+import hashlib
+
 from src.config import (
     FEATURE_COLUMNS,
     ZONE_DEFAULTS,
@@ -12,8 +14,14 @@ from src.config import (
 
 
 def _state_offset(state: str, district: str | None, feature: str) -> float:
-    """Deterministic offset per state+district so recommendations vary meaningfully by region."""
-    h = hash((state, district or "", feature)) % 100
+    """Deterministic offset per state+district so recommendations vary meaningfully by region.
+
+    Uses hashlib (SHA-256) instead of hash() because Python's built-in hash()
+    is randomized across process restarts (PYTHONHASHSEED), which would cause
+    different recommendations for the same inputs on each app restart.
+    """
+    key = f"{state}|{district or ''}|{feature}"
+    h = int(hashlib.sha256(key.encode()).hexdigest(), 16) % 100
     return (h - 50) / 50.0  # -1.0 to +1.0
 
 

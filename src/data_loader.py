@@ -5,6 +5,8 @@ Loads CSV from data/raw/, normalizes column names, and validates feature columns
 - Drops rows with missing values to avoid downstream errors in scaling and model training.
 """
 
+import hashlib
+
 import pandas as pd
 from pathlib import Path
 
@@ -129,8 +131,10 @@ def load_crop_yield_as_training(base_df: pd.DataFrame | None = None) -> pd.DataF
         else:
             soil = get_state_soil_climate(state)
 
-        # Add small variation based on state hash to create diversity
-        h = hash((state, label)) % 100
+        # Add small variation based on deterministic hash to create diversity
+        # Uses hashlib instead of hash() to avoid PYTHONHASHSEED randomization
+        key = f"{state}|{label}"
+        h = int(hashlib.sha256(key.encode()).hexdigest(), 16) % 100
         delta = (h - 50) / 100.0  # -0.5 to +0.5
 
         rows.append({

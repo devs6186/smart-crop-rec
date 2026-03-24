@@ -1066,8 +1066,8 @@ DISEASE_RISK_DB: dict[str, list[dict]] = {
 # Severity → numeric score for composite calculation
 _SEVERITY_SCORE = {"low": 20, "medium": 50, "high": 80}
 
-# Risk label thresholds
-_RISK_LABELS = [(0, 25, "Low"), (26, 50, "Moderate"), (51, 75, "High"), (76, 100, "Very High")]
+# Risk label thresholds (using upper bounds to avoid gaps with float scores)
+_RISK_THRESHOLDS = [(25, "Low"), (50, "Moderate"), (75, "High"), (100, "Very High")]
 
 
 def get_disease_risks(crop: str) -> list[dict]:
@@ -1119,8 +1119,8 @@ def compute_composite_risk(
 
 def get_risk_label(score: float) -> str:
     """Convert numeric risk score to human-readable label."""
-    for lo, hi, label in _RISK_LABELS:
-        if lo <= score <= hi:
+    for threshold, label in _RISK_THRESHOLDS:
+        if score <= threshold:
             return label
     return "Very High"
 
