@@ -1,7 +1,7 @@
 """
 Streamlit UI — Smart Agriculture Advisory System.
 Home: state, district, land size → "Proceed to Analysis". Analysis: top 5 crops by advisory score;
-production and prices in kg and ₹; no profit display. Light agricultural theme.
+production and prices in kg and ₹; no profit display. Dark theme with emerald accents.
 Run with: streamlit run app.py
 """
 
@@ -77,23 +77,180 @@ def build_download_df(top5: list[dict]) -> pd.DataFrame:
 
 
 # ---------------------------------------------------------------------------
-# Dark theme
+# Dark + emerald theme (matches landing page)
 # ---------------------------------------------------------------------------
 
 def apply_theme():
     st.markdown("""
     <style>
-    /* Dark theme */
-    .stApp { background: linear-gradient(180deg, #0e1117 0%, #1a1d24 50%, #0e1117 100%); }
-    [data-testid="stHeader"] { background: rgba(14, 17, 23, 0.9); }
-    .main .block-container { padding-top: 1.5rem; }
-    h1, h2, h3 { color: #b8d4b8 !important; }
-    p, span, label { color: #fafafa !important; }
-    .stMetric label { color: #a8c8a8; }
-    div[data-testid="stExpander"] { background: #262730; border-radius: 8px; border: 1px solid #3d4a3d; }
-    .stButton > button { background: #2d5a2d !important; color: white !important; border-radius: 8px; }
-    .stButton > button:hover { background: #3d7a3d !important; }
-    [data-testid="stSidebar"] { background: #1a1d24; }
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap');
+
+    /* ── Base ── */
+    .stApp {
+        background: #0a0a0a !important;
+        font-family: 'Inter', sans-serif;
+    }
+    [data-testid="stHeader"] {
+        background: rgba(10, 10, 10, 0.85) !important;
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(52, 211, 153, 0.08);
+    }
+    .main .block-container {
+        padding-top: 2rem;
+        max-width: 1100px;
+    }
+
+    /* ── Typography ── */
+    h1 {
+        color: #34d399 !important;
+        font-weight: 900 !important;
+        letter-spacing: 0.02em;
+    }
+    h2, h3 {
+        color: #d1d5db !important;
+        font-weight: 700 !important;
+        letter-spacing: 0.01em;
+    }
+    p, span, label, li {
+        color: #d1d5db !important;
+    }
+
+    /* ── Metrics ── */
+    [data-testid="stMetric"] {
+        background: rgba(52, 211, 153, 0.04);
+        border: 1px solid rgba(52, 211, 153, 0.12);
+        border-radius: 12px;
+        padding: 1rem 1.2rem;
+    }
+    [data-testid="stMetric"] label {
+        color: rgba(52, 211, 153, 0.7) !important;
+        font-size: 0.7rem !important;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+    }
+    [data-testid="stMetric"] [data-testid="stMetricValue"] {
+        color: #ffffff !important;
+        font-weight: 700 !important;
+    }
+
+    /* ── Buttons ── */
+    .stButton > button {
+        background: #34d399 !important;
+        color: #0a0a0a !important;
+        border: none !important;
+        border-radius: 6px !important;
+        font-weight: 700 !important;
+        letter-spacing: 0.04em;
+        transition: all 0.2s ease;
+    }
+    .stButton > button:hover {
+        background: #6ee7b7 !important;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 20px rgba(52, 211, 153, 0.25);
+    }
+    .stButton > button:active {
+        transform: translateY(0);
+    }
+
+    /* ── Download button ── */
+    .stDownloadButton > button {
+        background: transparent !important;
+        color: #34d399 !important;
+        border: 1px solid rgba(52, 211, 153, 0.3) !important;
+        border-radius: 6px !important;
+        font-weight: 600 !important;
+    }
+    .stDownloadButton > button:hover {
+        background: rgba(52, 211, 153, 0.1) !important;
+        border-color: #34d399 !important;
+    }
+
+    /* ── Expanders ── */
+    div[data-testid="stExpander"] {
+        background: rgba(255, 255, 255, 0.02) !important;
+        border: 1px solid rgba(255, 255, 255, 0.06) !important;
+        border-radius: 12px !important;
+        transition: border-color 0.3s ease;
+    }
+    div[data-testid="stExpander"]:hover {
+        border-color: rgba(52, 211, 153, 0.2) !important;
+    }
+    div[data-testid="stExpander"] summary span {
+        color: #e5e7eb !important;
+        font-weight: 600 !important;
+    }
+
+    /* ── Sidebar ── */
+    [data-testid="stSidebar"] {
+        background: #111318 !important;
+        border-right: 1px solid rgba(255, 255, 255, 0.06);
+    }
+    [data-testid="stSidebar"] h1,
+    [data-testid="stSidebar"] h2,
+    [data-testid="stSidebar"] h3 {
+        color: #34d399 !important;
+    }
+
+    /* ── Inputs ── */
+    .stSelectbox > div > div,
+    .stNumberInput > div > div > input {
+        background: #111318 !important;
+        border: 1px solid rgba(255, 255, 255, 0.1) !important;
+        border-radius: 8px !important;
+        color: #e5e7eb !important;
+    }
+    .stSelectbox > div > div:focus-within,
+    .stNumberInput > div > div:focus-within {
+        border-color: rgba(52, 211, 153, 0.5) !important;
+        box-shadow: 0 0 0 1px rgba(52, 211, 153, 0.2);
+    }
+
+    /* ── Progress bar ── */
+    .stProgress > div > div > div {
+        background: #34d399 !important;
+    }
+
+    /* ── Divider ── */
+    hr {
+        border-color: rgba(255, 255, 255, 0.06) !important;
+    }
+
+    /* ── Info / Warning / Error boxes ── */
+    .stAlert [data-testid="stAlertContentInfo"] {
+        background: rgba(52, 211, 153, 0.06) !important;
+        border-left-color: #34d399 !important;
+        color: #d1d5db !important;
+    }
+    div[data-testid="stNotification"] {
+        border-radius: 8px !important;
+    }
+
+    /* ── Dataframe ── */
+    .stDataFrame {
+        border-radius: 12px;
+        overflow: hidden;
+    }
+
+    /* ── Bar chart ── */
+    .stBarChart {
+        border-radius: 12px;
+        overflow: hidden;
+    }
+
+    /* ── Caption ── */
+    .stCaption, [data-testid="stCaptionContainer"] {
+        color: rgba(255, 255, 255, 0.35) !important;
+    }
+    [data-testid="stCaptionContainer"] p,
+    [data-testid="stCaptionContainer"] span {
+        color: rgba(255, 255, 255, 0.35) !important;
+    }
+
+    /* ── Scrollbar ── */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #0a0a0a; }
+    ::-webkit-scrollbar-thumb { background: #1a3a2a; border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: #2d5a3d; }
     </style>
     """, unsafe_allow_html=True)
 
@@ -111,8 +268,8 @@ def main():
     apply_theme()
     ensure_dirs()
 
-    st.title("🌾 Smart Agriculture Advisory System")
-    st.caption("Advisory-only recommendations • Production in kg • Prices in ₹ • No profit display")
+    st.title("🌾 Smart Crop Advisory System")
+    st.caption("Advisory recommendations • Production in kg • Prices in ₹ • Region-aware intelligence")
 
     if not (MODELS_DIR / "model.joblib").exists():
         st.error("No trained model found. Run `python run_pipeline.py` first.")
@@ -361,6 +518,12 @@ def _get_engine_stats():
 
 def _render_sidebar():
     sb = st.sidebar
+    sb.markdown(
+        '<div style="text-align:center; padding: 0.5rem 0 1rem;">'
+        '<span style="color:#34d399; font-weight:900; font-size:1.1rem; letter-spacing:0.1em;">SMART CROP</span>'
+        '</div>',
+        unsafe_allow_html=True,
+    )
     sb.divider()
     sb.markdown("**Data used for analysis**")
     stats = _get_engine_stats()
@@ -386,7 +549,7 @@ def _render_sidebar():
                     except Exception as exc:
                         st.error(f"Failed: {exc}")
     sb.divider()
-    sb.caption("Smart Agriculture Advisory System")
+    sb.caption("Smart Crop Advisory System")
 
 
 if __name__ == "__main__":
