@@ -457,9 +457,9 @@ def main():
                     st.markdown(f"- {m}")
 
             if c["crop_suggestions"]:
-                with st.expander("Soil-based growing tips"):
-                    for s in c["crop_suggestions"]:
-                        st.info(s)
+                st.markdown("**Soil-based growing tips**")
+                for s in c["crop_suggestions"]:
+                    st.markdown(f"- {s}")
 
     st.divider()
 
