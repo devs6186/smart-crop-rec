@@ -1,5 +1,8 @@
+"use client";
+
 import React from "react";
 import Link from "next/link";
+import LaunchAppButton from "./LaunchAppButton";
 
 export default function Footer() {
   return (
@@ -26,18 +29,16 @@ export default function Footer() {
               System
             </h4>
             <ul className="space-y-4">
-              {["Technology", "Features", "About"].map(
-                (link) => (
-                  <li key={link}>
-                    <Link
-                      href={`#${link.toLowerCase()}`}
-                      className="text-xs uppercase tracking-widest text-white/40 hover:text-emerald-400 transition-colors"
-                    >
-                      {link}
-                    </Link>
-                  </li>
-                )
-              )}
+              {["Technology", "Features", "About"].map((link) => (
+                <li key={link}>
+                  <Link
+                    href={`#${link.toLowerCase()}`}
+                    className="text-xs uppercase tracking-widest text-white/40 hover:text-emerald-400 transition-colors"
+                  >
+                    {link}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
 
@@ -66,23 +67,18 @@ export default function Footer() {
           <div className="text-[10px] uppercase tracking-[0.2em] text-white/30">
             Smart Agriculture Advisory System &mdash; Open Source
           </div>
-          <div className="flex gap-6">
+          <div className="flex gap-6 items-center">
             <a
-              href="https://github.com"
+              href="https://github.com/devs6186/smart-crop-rec"
               target="_blank"
               rel="noopener noreferrer"
               className="text-[10px] uppercase tracking-[0.2em] text-white/30 hover:text-emerald-400 transition-colors"
             >
               GitHub
             </a>
-            <a
-              href="http://localhost:8501"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-[10px] uppercase tracking-[0.2em] text-white/30 hover:text-emerald-400 transition-colors"
-            >
+            <LaunchAppButton className="text-[10px] uppercase tracking-[0.2em] text-white/30 hover:text-emerald-400 transition-colors">
               Launch App
-            </a>
+            </LaunchAppButton>
           </div>
         </div>
       </div>

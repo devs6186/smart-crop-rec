@@ -2,6 +2,7 @@
 
 import React from "react";
 import { motion } from "framer-motion";
+import LaunchAppButton from "./LaunchAppButton";
 
 const steps = [
   {
@@ -86,15 +87,10 @@ export default function CTASection() {
             Open source. Free to use. Built on real data.
           </p>
 
-          <a
-            href="http://localhost:8501"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="group relative inline-flex items-center justify-center px-12 py-5 font-syncopate text-xs uppercase tracking-[0.3em] font-bold text-black bg-emerald-400 overflow-hidden transition-all hover:scale-105 hover:bg-emerald-300 duration-300 rounded-sm"
-          >
+          <LaunchAppButton className="group relative inline-flex items-center justify-center px-12 py-5 font-syncopate text-xs uppercase tracking-[0.3em] font-bold text-black bg-emerald-400 overflow-hidden transition-all hover:scale-105 hover:bg-emerald-300 duration-300 rounded-sm">
             <span className="absolute w-0 h-0 transition-all duration-500 ease-out bg-black/10 rounded-full group-hover:w-64 group-hover:h-56"></span>
             <span className="relative">Launch Advisory System</span>
-          </a>
+          </LaunchAppButton>
 
           <div className="mt-8 text-xs font-syncopate uppercase tracking-[0.2em] text-white/30">
             Powered by Streamlit + scikit-learn

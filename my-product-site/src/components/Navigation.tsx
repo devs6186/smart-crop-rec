@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import LaunchAppButton from "./LaunchAppButton";
 
 export default function Navigation() {
   const [scrolled, setScrolled] = useState(false);
@@ -53,14 +54,9 @@ export default function Navigation() {
           ))}
         </div>
 
-        <a
-          href="http://localhost:8501"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="px-6 py-2.5 border border-emerald-400/30 hover:bg-emerald-400 hover:text-black transition-all duration-300 text-xs uppercase tracking-widest font-syncopate text-emerald-400 hover:border-emerald-400"
-        >
+        <LaunchAppButton className="px-6 py-2.5 border border-emerald-400/30 hover:bg-emerald-400 hover:text-black transition-all duration-300 text-xs uppercase tracking-widest font-syncopate text-emerald-400 hover:border-emerald-400">
           Launch App
-        </a>
+        </LaunchAppButton>
       </div>
     </nav>
   );
